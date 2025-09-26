@@ -1,1 +1,67 @@
+# This script demonstrates good OO design by applying the principles of
+# high cohesion and low coupling.
 
+class Task:
+    """
+    This class has HIGH COHESION. It adheres to the Single Responsibility Principle
+    by only managing data and behaviors related to a task.
+    """
+    def __init__(self, title, due_date):
+        self.title = title
+        self.due_date = due_date
+        self.is_completed = False
+    
+    def get_info(self):
+        """Returns the task's information."""
+        return f"Task Title: {self.title} (Due: {self.due_date})"
+
+    def set_completion_status(self, status):
+        """Updates the completion status of the task."""
+        self.is_completed = status
+        
+
+class User:
+    """
+    This class also has HIGH COHESION. It only manages data and behaviors
+    related to a user.
+    """
+    def __init__(self, name, user_id):
+        self.name = name
+        self.user_id = user_id
+
+    def update_profile(self, new_name):
+        """Updates the user's name."""
+        self.name = new_name
+
+
+class TaskScheduler:
+    """
+    This class has LOW COUPLING. It does not create its dependencies directly.
+    Instead, it interacts with general concepts (Task and User objects).
+    """
+    def __init__(self, task, user):
+        # Low Coupling: The TaskScheduler class is passed a Task and a User object.
+        # It doesn't care how or where they were created.
+        self.task = task
+        self.user = user
+    
+    def assign_task(self):
+        """Issues the task to the user."""
+        print(f"Task '{self.task.title}' assigned to user '{self.user.name}'.")
+
+    def run_simulation(self):
+        """A simple simulation of task management operations."""
+        print("\n--- Simulation with Good OO Design ---")
+        print(self.task.get_info())
+        self.assign_task()
+        self.task.set_completion_status(True)
+        self.user.update_profile("David")
+        print(f"Current user is: {self.user.name}")
+
+if __name__ == "__main__":
+    # The dependencies are created outside and injected into the TaskScheduler class.
+    task_instance = Task("Write Project Report", "2025-10-15")
+    user_instance = User("Charlie", "U202")
+
+    scheduler = TaskScheduler(task=task_instance, user=user_instance)
+    scheduler.run_simulation()
