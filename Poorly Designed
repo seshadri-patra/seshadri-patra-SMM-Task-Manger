@@ -1,0 +1,55 @@
+# This script contains classes with bad design, for demonstration purposes.
+
+class TaskAndUser:
+    """
+    This class has LOW COHESION because it violates the Single Responsibility Principle.
+    It manages both task data AND user data, which are two separate concerns.
+    """
+    def __init__(self, title, due_date, user_name, user_id):
+        self.title = title
+        self.due_date = due_date
+        self.user_name = user_name
+        self.user_id = user_id
+        self.is_completed = False
+
+    def display_task_info(self):
+        """Displays information about the task."""
+        print(f"Task Title: {self.title} (Due: {self.due_date})")
+        
+    def mark_as_complete(self):
+        """Manages the task completion logic."""
+        self.is_completed = True
+        print(f"Task '{self.title}' marked as complete.")
+    
+    def update_user_info(self, new_name):
+        """Manages the user's profile."""
+        self.user_name = new_name
+        print(f"User ID {self.user_id} profile updated to '{self.user_name}'.")
+
+
+class TaskScheduler:
+    """
+    This class has HIGH COUPLING because it directly creates and depends on
+    the specific 'TaskAndUser' class. If we want to change how tasks or users
+    are handled, this class must also change.
+    """
+    def __init__(self):
+        # High Coupling: The TaskScheduler class is tightly bound to a concrete class.
+        self.item = TaskAndUser(
+            title="Write Project Report", 
+            due_date="2025-10-15", 
+            user_name="Charlie", 
+            user_id="U202"
+        )
+    
+    def run_simulation(self):
+        """A simple simulation of task management operations."""
+        print("--- Simulation with Bad OO Design ---")
+        self.item.display_task_info()
+        self.item.mark_as_complete()
+        self.item.update_user_info("David")
+        print(f"Current user is: {self.item.user_name}")
+
+if __name__ == "__main__":
+    scheduler = TaskScheduler()
+    scheduler.run_simulation()
